@@ -8,6 +8,8 @@ services:
     container_name: rc_play_server
     environment:
       - MTX_API=yes
+      - MTX_APIUSER=admin
+      - MTX_APIPASS=admin
     ports:
       - "8554:8554" # RTSP
       - "1935:1935" # RTMP

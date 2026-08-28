@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
+import { getGlobalConfig } from '@/api/globalConfig'
 
 const router = useRouter()
 const isLoading = ref(false)
@@ -12,7 +13,7 @@ const loginForm = reactive({
   password: ''
 })
 
-const handleLogin = () => {
+const handleLogin = async () => {
   if (!loginForm.username || !loginForm.password) {
     ElMessage.warning('Por favor, preencha o usuário e a senha!')
     return
@@ -20,17 +21,26 @@ const handleLogin = () => {
   
   isLoading.value = true
   
-  // Simulação de login simples (Hardcoded Option 1)
-  setTimeout(() => {
-    if (loginForm.username === 'admin' && loginForm.password === 'admin') {
-      localStorage.setItem('isAuthenticated', 'true')
-      ElMessage.success('Login realizado com sucesso!')
-      router.push('/')
-    } else {
-      ElMessage.error('Usuário ou senha incorretos!')
-    }
+  // Salva temporariamente para a requisição de teste
+  localStorage.setItem('apiUser', loginForm.username)
+  localStorage.setItem('apiPass', loginForm.password)
+
+  try {
+    // Tenta acessar a API para validar as credenciais
+    await getGlobalConfig()
+    
+    // Se não der erro 401, as credenciais estão corretas
+    localStorage.setItem('isAuthenticated', 'true')
+    ElMessage.success('Login realizado com sucesso!')
+    router.push('/')
+  } catch (error) {
+    // Remove se falhou
+    localStorage.removeItem('apiUser')
+    localStorage.removeItem('apiPass')
+    ElMessage.error('Usuário ou senha incorretos!')
+  } finally {
     isLoading.value = false
-  }, 1000)
+  }
 }
 </script>
 

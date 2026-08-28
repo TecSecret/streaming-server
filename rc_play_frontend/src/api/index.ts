@@ -6,13 +6,28 @@ const api = axios.create({
 })
 
 api.interceptors.request.use(
-  (config) => config,
+  (config) => {
+    const user = localStorage.getItem('apiUser')
+    const pass = localStorage.getItem('apiPass')
+    if (user && pass) {
+      config.auth = { username: user, password: pass }
+    }
+    return config
+  },
   (error) => Promise.reject(error)
 )
 
 api.interceptors.response.use(
   (response) => response.data,
-  (error) => Promise.reject(error)
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem('isAuthenticated')
+      localStorage.removeItem('apiUser')
+      localStorage.removeItem('apiPass')
+      window.location.href = '/login'
+    }
+    return Promise.reject(error)
+  }
 )
 
 export default api
