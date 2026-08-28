@@ -6,11 +6,24 @@ services:
       context: ./rc_play_server
       dockerfile: Dockerfile
     container_name: rc_play_server
+    environment:
+      - MTX_API=yes
     ports:
       - "8554:8554" # RTSP
       - "1935:1935" # RTMP
       - "8888:8888" # HLS
       - "8889:8889" # WebRTC
+      - "9997:9997" # API
     restart: always
 
-  # rc_play_frontend service will go here
+  rc_play_frontend:
+    build:
+      context: ./rc_play_frontend
+      dockerfile: Dockerfile
+    container_name: rc_play_frontend
+    ports:
+      - "3000:3000" # Vite Dev Server
+    volumes:
+      - ./rc_play_frontend:/app
+      - /app/node_modules
+    restart: always

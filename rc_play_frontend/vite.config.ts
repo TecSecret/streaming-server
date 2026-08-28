@@ -14,12 +14,12 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:9997',
+        target: 'http://rc_play_server:9997',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       },
       '/webrtc': {
-        target: 'http://localhost:8889',
+        target: 'http://rc_play_server:8889',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/webrtc/, '')
       }
