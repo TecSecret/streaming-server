@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  rc_play_server:
+    build:
+      context: ./rc_play_server
+      dockerfile: Dockerfile
+    container_name: rc_play_server
+    ports:
+      - "8554:8554" # RTSP
+      - "1935:1935" # RTMP
+      - "8888:8888" # HLS
+      - "8889:8889" # WebRTC
+    restart: always
+
+  # rc_play_frontend service will go here
