@@ -25,7 +25,7 @@ const checkIsMobile = () => {
 onMounted(() => {
   checkIsMobile()
   window.addEventListener('resize', checkIsMobile)
-  if (sessionStorage.getItem('authToken')) {
+  if (localStorage.getItem('authToken') || sessionStorage.getItem('authToken')) {
     systemStore.fetchInfo().catch(() => {})
   }
 })
