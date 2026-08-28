@@ -7,43 +7,43 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: () => import('@/views/Home.vue'),
-      meta: { title: '仪表盘' }
+      meta: { title: 'Painel' }
     },
     {
       path: '/paths',
       name: 'paths',
       component: () => import('@/views/Paths.vue'),
-      meta: { title: '路径状态' }
+      meta: { title: 'Status das Rotas' }
     },
     {
       path: '/paths/config',
       name: 'pathsConfig',
       component: () => import('@/views/PathsConfig.vue'),
-      meta: { title: '路径配置' }
+      meta: { title: 'Configuração das Rotas' }
     },
     {
       path: '/rtsp/connections',
       name: 'rtspConnections',
       component: () => import('@/views/RtspConnections.vue'),
-      meta: { title: 'RTSP 连接' }
+      meta: { title: 'Conexões RTSP' }
     },
     {
       path: '/rtsp/sessions',
       name: 'rtspSessions',
       component: () => import('@/views/RtspSessions.vue'),
-      meta: { title: 'RTSP 会话' }
+      meta: { title: 'Sessões RTSP' }
     },
     {
       path: '/rtmp/connections',
       name: 'rtmpConnections',
       component: () => import('@/views/RtmpConnections.vue'),
-      meta: { title: 'RTMP 连接' }
+      meta: { title: 'Conexões RTMP' }
     },
     {
       path: '/webrtc/sessions',
       name: 'webrtcSessions',
       component: () => import('@/views/WebRTCSessions.vue'),
-      meta: { title: 'WebRTC 会话' }
+      meta: { title: 'Sessões WebRTC' }
     },
     {
       path: '/hls/muxers',
@@ -55,19 +55,19 @@ const router = createRouter({
       path: '/srt/connections',
       name: 'srtConnections',
       component: () => import('@/views/SrtConnections.vue'),
-      meta: { title: 'SRT 连接' }
+      meta: { title: 'Conexões SRT' }
     },
     {
       path: '/recordings',
       name: 'recordings',
       component: () => import('@/views/Recordings.vue'),
-      meta: { title: '录制管理' }
+      meta: { title: 'Gravações' }
     },
     {
       path: '/config',
       name: 'config',
       component: () => import('@/views/Config.vue'),
-      meta: { title: '系统配置' }
+      meta: { title: 'Configuração do Sistema' }
     }
   ]
 })

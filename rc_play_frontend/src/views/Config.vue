@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="page-header">
-      <h1>系统配置</h1>
+      <h1>Configuração do Sistema</h1>
       <div class="page-actions">
-        <el-button :icon="Refresh" @click="refreshConfig">刷新</el-button>
-        <el-button type="primary" @click="saveConfig">保存配置</el-button>
+        <el-button :icon="Refresh" @click="refreshConfig">Atualizar</el-button>
+        <el-button type="primary" @click="saveConfig">Salvar Configuração</el-button>
       </div>
     </div>
 
     <el-card shadow="hover">
       <el-tabs v-model="activeTab" type="border-card">
         <!-- 基本配置 -->
-        <el-tab-pane label="基本配置" name="general">
+        <el-tab-pane label="Geral" name="general">
           <el-form :model="configStore.config" label-width="180px">
-            <el-form-item label="日志级别">
+            <el-form-item label="Nível de Log">
               <el-select v-model="configStore.config.logLevel" style="width: 100%">
                 <el-option label="DEBUG" value="debug" />
                 <el-option label="INFO" value="info" />
@@ -21,35 +21,35 @@
                 <el-option label="ERROR" value="error" />
               </el-select>
             </el-form-item>
-            <el-form-item label="日志文件">
+            <el-form-item label="Arquivo de Log">
               <el-input v-model="configStore.config.logFile" />
             </el-form-item>
-            <el-form-item label="读取超时">
+            <el-form-item label="Timeout Leitura">
               <el-input v-model="configStore.config.readTimeout" />
             </el-form-item>
-            <el-form-item label="写入超时">
+            <el-form-item label="Timeout Escrita">
               <el-input v-model="configStore.config.writeTimeout" />
             </el-form-item>
-            <el-form-item label="写入队列大小">
+            <el-form-item label="Tamanho da Fila">
               <el-input-number v-model="configStore.config.writeQueueSize" :min="1" style="width: 100%" />
             </el-form-item>
-            <el-form-item label="UDP 最大负载大小">
+            <el-form-item label="Carga Máx UDP">
               <el-input-number v-model="configStore.config.udpMaxPayloadSize" :min="1" style="width: 100%" />
             </el-form-item>
           </el-form>
         </el-tab-pane>
 
         <!-- 认证配置 -->
-        <el-tab-pane label="认证" name="auth">
+        <el-tab-pane label="Autenticação" name="auth">
           <el-form :model="configStore.config" label-width="180px">
-            <el-form-item label="认证方法">
+            <el-form-item label="Método">
               <el-select v-model="configStore.config.authMethod" style="width: 100%">
                 <el-option label="内部" value="internal" />
                 <el-option label="HTTP" value="http" />
                 <el-option label="JWT" value="jwt" />
               </el-select>
             </el-form-item>
-            <el-form-item label="HTTP 认证地址">
+            <el-form-item label="Endereço HTTP Auth">
               <el-input v-model="configStore.config.authHTTPAddress" />
             </el-form-item>
             <el-form-item label="JWT JWKS">
@@ -200,18 +200,18 @@ const activeTab = ref('general')
 const refreshConfig = async () => {
   try {
     await configStore.fetchConfig()
-    ElMessage.success('配置已刷新')
+    ElMessage.success('Configuração atualizada')
   } catch {
-    ElMessage.error('刷新配置失败')
+    ElMessage.error('Falha ao atualizar configuração')
   }
 }
 
 const saveConfig = async () => {
   try {
     await configStore.saveConfig(configStore.config)
-    ElMessage.success('配置已保存')
+    ElMessage.success('Configuração salva')
   } catch {
-    ElMessage.error('保存配置失败')
+    ElMessage.error('Falha ao salvar configuração')
   }
 }
 
