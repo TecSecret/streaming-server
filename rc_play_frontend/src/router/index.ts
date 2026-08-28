@@ -81,7 +81,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title || 'MediaMTX'} - MediaMTX Admin`
   
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'
+  const isAuthenticated = !!sessionStorage.getItem('authToken')
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth !== false)
   
   if (to.path !== '/login' && !isAuthenticated) {

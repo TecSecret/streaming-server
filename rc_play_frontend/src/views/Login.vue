@@ -10,7 +10,8 @@ const isLoading = ref(false)
 
 const loginForm = reactive({
   username: '',
-  password: ''
+  password: '',
+  rememberMe: false
 })
 
 const handleLogin = async () => {
@@ -21,22 +22,27 @@ const handleLogin = async () => {
   
   isLoading.value = true
   
-  // Salva temporariamente para a requisição de teste
-  localStorage.setItem('apiUser', loginForm.username)
-  localStorage.setItem('apiPass', loginForm.password)
+  // Cria o token Base64 no formato exigido pelo HTTP Basic Auth
+  const token = btoa(`${loginForm.username}:${loginForm.password}`)
+  
+  // Salva no localStorage (persistente) ou sessionStorage (volátil)
+  if (loginForm.rememberMe) {
+    localStorage.setItem('authToken', token)
+  } else {
+    sessionStorage.setItem('authToken', token)
+  }
 
   try {
-    // Tenta acessar a API para validar as credenciais
+    // Tenta acessar a API do MediaMTX para validar
     await getGlobalConfig()
     
-    // Se não der erro 401, as credenciais estão corretas
-    localStorage.setItem('isAuthenticated', 'true')
-    ElMessage.success('Login realizado com sucesso!')
+    // Sucesso
+    ElMessage.success('Login realizado com segurança!')
     router.push('/')
   } catch (error) {
-    // Remove se falhou
-    localStorage.removeItem('apiUser')
-    localStorage.removeItem('apiPass')
+    // Falha: remove o token inválido
+    sessionStorage.removeItem('authToken')
+    localStorage.removeItem('authToken')
     ElMessage.error('Usuário ou senha incorretos!')
   } finally {
     isLoading.value = false
@@ -49,7 +55,7 @@ const handleLogin = async () => {
     <el-card class="login-card" shadow="always">
       <div class="login-header">
         <h2 class="title">Roda de Cuia</h2>
-        <p class="subtitle">Streaming Server</p>
+        <p class="subtitle">Acesso Restrito</p>
       </div>
 
       <el-form :model="loginForm" @keyup.enter="handleLogin" size="large">
@@ -72,13 +78,19 @@ const handleLogin = async () => {
         </el-form-item>
 
         <el-form-item>
+          <el-checkbox v-model="loginForm.rememberMe" class="remember-checkbox">
+            Manter-me conectado
+          </el-checkbox>
+        </el-form-item>
+
+        <el-form-item>
           <el-button 
             type="primary" 
             class="login-button" 
             :loading="isLoading"
             @click="handleLogin"
           >
-            Entrar
+            Entrar Seguro
           </el-button>
         </el-form-item>
       </el-form>
@@ -132,5 +144,10 @@ const handleLogin = async () => {
   width: 100%;
   border-radius: 8px;
   font-weight: bold;
+}
+
+.remember-checkbox {
+  margin-top: -10px;
+  margin-bottom: 5px;
 }
 </style>

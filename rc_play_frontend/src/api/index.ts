@@ -7,10 +7,9 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const user = localStorage.getItem('apiUser')
-    const pass = localStorage.getItem('apiPass')
-    if (user && pass) {
-      config.auth = { username: user, password: pass }
+    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken')
+    if (token) {
+      config.headers.Authorization = `Basic ${token}`
     }
     return config
   },
@@ -21,9 +20,7 @@ api.interceptors.response.use(
   (response) => response.data,
   (error) => {
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('isAuthenticated')
-      localStorage.removeItem('apiUser')
-      localStorage.removeItem('apiPass')
+      sessionStorage.removeItem('authToken')
       window.location.href = '/login'
     }
     return Promise.reject(error)
