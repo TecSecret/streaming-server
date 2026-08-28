@@ -51,6 +51,7 @@ watch(
 
     <!-- Sidebar -->
     <aside
+      v-if="$route.name !== 'login'"
       :style="{ width: isCollapse ? '64px' : '220px' }"
       :class="['sidebar-container', { collapsed: isMobile && isCollapse, 'mobile-open': isMobile && !isCollapse }]"
     >
@@ -125,7 +126,7 @@ watch(
 
     <!-- Main -->
     <div class="main-container">
-      <header class="app-header">
+      <header class="app-header" v-if="$route.name !== 'login'">
         <div class="header-left">
           <el-icon style="font-size: 20px; cursor: pointer" @click="toggleSidebar">
             <Expand v-if="isCollapse" />
@@ -154,7 +155,7 @@ watch(
         </div>
       </header>
 
-      <main class="app-main">
+      <main :class="['app-main', { 'is-login': $route.name === 'login' }]">
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in">
             <component :is="Component" />
@@ -168,6 +169,14 @@ watch(
 <style scoped>
 .sidebar-container {
   flex-shrink: 0;
+}
+
+.app-main.is-login {
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 }
 
 .sidebar-menu {
