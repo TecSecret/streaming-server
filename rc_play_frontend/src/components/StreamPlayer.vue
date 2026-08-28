@@ -12,20 +12,20 @@
     <div v-if="player.state.value !== 'connected'" class="player-overlay">
       <template v-if="player.state.value === 'connecting'">
         <el-icon class="spin" :size="36"><Loading /></el-icon>
-        <span class="overlay-text">正在连接...</span>
+        <span class="overlay-text">Conectando...</span>
       </template>
       <template v-else-if="player.state.value === 'reconnecting'">
         <el-icon class="spin" :size="36"><Loading /></el-icon>
-        <span class="overlay-text">{{ player.error.value || '正在重连...' }}</span>
+        <span class="overlay-text">{{ player.error.value || 'Reconectando...' }}</span>
       </template>
       <template v-else-if="player.state.value === 'error'">
         <el-icon :size="36" color="#f56c6c"><CircleCloseFilled /></el-icon>
-        <span class="overlay-text">{{ player.error.value || '连接失败' }}</span>
-        <el-button type="primary" size="small" @click="retry" style="margin-top: 8px">重试</el-button>
+        <span class="overlay-text">{{ player.error.value || 'Falha na conexão' }}</span>
+        <el-button type="primary" size="small" @click="retry" style="margin-top: 8px">Tentar Novamente</el-button>
       </template>
       <template v-else>
         <el-icon :size="36" color="#909399"><VideoPlay /></el-icon>
-        <span class="overlay-text">等待播放</span>
+        <span class="overlay-text">Aguardando reprodução</span>
       </template>
     </div>
 

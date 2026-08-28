@@ -65,7 +65,7 @@
         <el-tag v-for="(t, i) in currentPath.tracks2" :key="i" style="margin: 0 4px 4px 0">{{ t.codec }}</el-tag>
       </template>
       <template v-if="currentPath?.readers?.length">
-        <h4 style="margin: 16px 0 8px">读取者</h4>
+        <h4 style="margin: 16px 0 8px">Leitores</h4>
         <el-tag v-for="(r, i) in currentPath.readers" :key="i" type="success" style="margin: 0 4px 4px 0">{{ r.type }}</el-tag>
       </template>
     </el-drawer>
@@ -73,7 +73,7 @@
     <!-- Player Dialog -->
     <el-dialog
       v-model="playerVisible"
-      :title="`播放 - ${playingPath}`"
+      :title="`Reproduzindo - ${playingPath}`"
       width="720px"
       destroy-on-close
       align-center

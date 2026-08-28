@@ -225,8 +225,8 @@ export function useWebRTCPlayer(
     queuedCandidates = []
 
     error.value = err
-    setState('reconnecting')
-    options.onError?.(`${err}，正在重连...`)
+    state.value = 'reconnecting'
+    options.onError?.(`${err}, tentando reconectar...`)
 
     restartTimeout = setTimeout(() => {
       restartTimeout = null
