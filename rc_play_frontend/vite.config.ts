@@ -18,6 +18,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       },
+      '/playback': {
+        target: 'http://rc_play_server:9996',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/playback/, '')
+      },
       '/webrtc': {
         target: 'http://rc_play_server:8889',
         changeOrigin: true,

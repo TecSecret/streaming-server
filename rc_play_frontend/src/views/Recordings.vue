@@ -1,36 +1,37 @@
 <template>
   <div>
     <div class="page-header">
-      <h1>录制管理</h1>
-      <el-button :icon="Refresh" @click="loadData" :loading="store.loading">刷新</el-button>
+      <h1>Gravações (Playback)</h1>
+      <el-button :icon="Refresh" @click="loadData" :loading="store.loading">Atualizar</el-button>
     </div>
     <el-card shadow="hover">
       <el-table :data="store.list" v-loading="store.loading" style="width: 100%">
-        <el-table-column prop="name" label="录制名称" min-width="200" show-overflow-tooltip />
-        <el-table-column label="段数" width="80" align="center">
-          <template #default="{ row }">{{ row.segments?.length || 0 }}</template>
-        </el-table-column>
-        <el-table-column label="操作" width="80">
+        <el-table-column prop="name" label="Nome da Rota" min-width="200" show-overflow-tooltip />
+        <el-table-column label="Ações" width="120">
           <template #default="{ row }">
-            <el-button text type="primary" size="small" @click="showDetail(row)">详情</el-button>
+            <el-button text type="primary" size="small" @click="showDetail(row)">Ver Segmentos</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-empty v-if="!store.loading && store.list.length === 0" description="暂无录制" />
+      <el-empty v-if="!store.loading && store.list.length === 0" description="Nenhuma Gravação" />
     </el-card>
 
-    <el-drawer v-model="drawerVisible" :title="currentRecording?.name" size="400px">
-      <template v-if="currentRecording">
-        <h4 style="margin-bottom: 12px">录制段 ({{ currentRecording.segments?.length || 0 }})</h4>
-        <el-table :data="currentRecording.segments || []" style="width: 100%">
-          <el-table-column label="开始时间">
+    <el-drawer v-model="drawerVisible" :title="currentPath" size="600px">
+      <template v-if="currentPath">
+        <h4 style="margin-bottom: 12px">Segmentos de Gravação</h4>
+        <el-table :data="store.playbackSegments" v-loading="loadingSegments" style="width: 100%">
+          <el-table-column label="Início" min-width="160">
             <template #default="{ row }">{{ formatDate(row.start) }}</template>
           </el-table-column>
-          <el-table-column label="操作" width="80">
+          <el-table-column label="Duração (s)" width="100">
+            <template #default="{ row }">{{ row.duration }}</template>
+          </el-table-column>
+          <el-table-column label="Ações" width="120">
             <template #default="{ row }">
-              <el-popconfirm title="确定删除此段？" @confirm="handleDeleteSegment(currentRecording!.name, row.start)">
+              <el-button text type="success" size="small" @click="playSegment(row)">Baixar/Tocar</el-button>
+              <el-popconfirm title="Deletar este segmento?" @confirm="handleDeleteSegment(currentPath, row.start)">
                 <template #reference>
-                  <el-button text type="danger" size="small">删除</el-button>
+                  <el-button text type="danger" size="small">Deletar</el-button>
                 </template>
               </el-popconfirm>
             </template>
@@ -47,26 +48,43 @@ import { useRecordingsStore } from '@/stores/recordings'
 import { formatDate } from '@/composables/useFormatters'
 import { ElMessage } from 'element-plus'
 import { Refresh } from '@element-plus/icons-vue'
+import { getPlaybackSegmentUrl } from '@/api/recordings'
 import type { APIRecording } from '@/types/api'
 
 const store = useRecordingsStore()
 const drawerVisible = ref(false)
-const currentRecording = ref<APIRecording | null>(null)
+const currentPath = ref<string>('')
+const loadingSegments = ref(false)
 
-const showDetail = (row: APIRecording) => {
-  currentRecording.value = row
+const showDetail = async (row: APIRecording) => {
+  currentPath.value = row.name
   drawerVisible.value = true
+  await loadSegments(row.name)
 }
 
-const handleDeleteSegment = async (name: string, start: string) => {
+const loadSegments = async (path: string) => {
+  loadingSegments.value = true
   try {
-    await store.deleteSegment(name, start)
-    ElMessage.success('已删除')
-    // 重新加载详情
-    const updated = await store.fetchOne(name)
-    currentRecording.value = updated
+    await store.fetchPlaybackSegments(path)
+  } catch (e) {
+    ElMessage.error('Erro ao buscar segmentos')
+  } finally {
+    loadingSegments.value = false
+  }
+}
+
+const playSegment = (row: any) => {
+  const url = getPlaybackSegmentUrl(currentPath.value, row.start, row.duration)
+  window.open(url, '_blank')
+}
+
+const handleDeleteSegment = async (path: string, start: string) => {
+  try {
+    await store.deleteSegment(path, start)
+    ElMessage.success('Deletado')
+    await loadSegments(path)
   } catch {
-    ElMessage.error('删除失败')
+    ElMessage.error('Falha ao deletar')
   }
 }
 

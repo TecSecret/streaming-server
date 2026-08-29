@@ -100,14 +100,29 @@ watch(
           <el-menu-item index="/rtsp/sessions">
             <span>Sessões RTSP</span>
           </el-menu-item>
+          <el-menu-item index="/rtsps/connections">
+            <span>Conexões RTSPS</span>
+          </el-menu-item>
+          <el-menu-item index="/rtsps/sessions">
+            <span>Sessões RTSPS</span>
+          </el-menu-item>
           <el-menu-item index="/rtmp/connections">
             <span>Conexões RTMP</span>
+          </el-menu-item>
+          <el-menu-item index="/rtmps/connections">
+            <span>Conexões RTMPS</span>
           </el-menu-item>
           <el-menu-item index="/webrtc/sessions">
             <span>Sessões WebRTC</span>
           </el-menu-item>
           <el-menu-item index="/hls/muxers">
             <span>HLS Muxers</span>
+          </el-menu-item>
+          <el-menu-item index="/hls/sessions">
+            <span>Sessões HLS</span>
+          </el-menu-item>
+          <el-menu-item index="/moq/sessions">
+            <span>Sessões MoQ</span>
           </el-menu-item>
           <el-menu-item index="/srt/connections">
             <span>Conexões SRT</span>

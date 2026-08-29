@@ -46,6 +46,12 @@ const router = createRouter({
       meta: { title: 'Conexões RTMP' }
     },
     {
+      path: '/rtmps/connections',
+      name: 'rtmpsConnections',
+      component: () => import('@/views/RtmpsConnections.vue'),
+      meta: { title: 'Conexões RTMPS' }
+    },
+    {
       path: '/webrtc/sessions',
       name: 'webrtcSessions',
       component: () => import('@/views/WebRTCSessions.vue'),
@@ -56,6 +62,18 @@ const router = createRouter({
       name: 'hlsMuxers',
       component: () => import('@/views/HlsMuxers.vue'),
       meta: { title: 'HLS Muxers' }
+    },
+    {
+      path: '/hls/sessions',
+      name: 'hlsSessions',
+      component: () => import('@/views/HlsSessions.vue'),
+      meta: { title: 'Sessões HLS' }
+    },
+    {
+      path: '/moq/sessions',
+      name: 'moqSessions',
+      component: () => import('@/views/MoQSessions.vue'),
+      meta: { title: 'Sessões MoQ' }
     },
     {
       path: '/srt/connections',

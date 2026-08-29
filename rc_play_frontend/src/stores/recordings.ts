@@ -5,6 +5,7 @@ import type { APIRecording, APIListResponse } from '@/types/api'
 
 export const useRecordingsStore = defineStore('recordings', () => {
   const list = ref<APIRecording[]>([])
+  const playbackSegments = ref<any[]>([])
   const itemCount = ref(0)
   const loading = ref(false)
 
@@ -24,10 +25,16 @@ export const useRecordingsStore = defineStore('recordings', () => {
     return res as unknown as APIRecording
   }
 
+  const fetchPlaybackSegments = async (path: string) => {
+    const res = await listPlaybackSegments(path)
+    playbackSegments.value = res as unknown as any[]
+    return playbackSegments.value
+  }
+
   const deleteSegment = async (path: string, start: string) => {
     await deleteRecordingSegment(path, start)
     await fetchList()
   }
 
-  return { list, itemCount, loading, fetchList, fetchOne, deleteSegment }
+  return { list, itemCount, loading, playbackSegments, fetchList, fetchOne, fetchPlaybackSegments, deleteSegment }
 })
